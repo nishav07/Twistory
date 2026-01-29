@@ -8,6 +8,7 @@ function flash(req,res,next){
 }
 
 
+
 async function hashing(pass){
     const saltRounds = 10;
     const hashPass = await bcrypt.hash(pass,saltRounds);

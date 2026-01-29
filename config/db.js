@@ -9,6 +9,7 @@ const pool = sql.createPool({
 })
 
 
+
 async function test() {
     const [rows] = await pool.query("SELECT 2+2 AS result");
     console.log(rows);

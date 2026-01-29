@@ -7,6 +7,7 @@ function send(req,res){
     res.render("index.ejs")
 }
 
+
 async function home(req,res){
     const [rows] = await pool.query("SELECT title,content FROM notes");
     console.log("initialdata",[rows]);

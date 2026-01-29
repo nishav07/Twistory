@@ -7,7 +7,7 @@ A full-stack Twitter-like web application built with Node.js, Express, and EJS t
 ## 🚀 Project Features
 
 ✔ User authentication system (Sign up / Login / Logout)  
-✔ Create, edit,like,comments and delete posts (tweets)  
+✔ Create, edit,like,comments and delete posts (story)  
 ✔ View all posts in timeline  
 ✔ Responsive, minimal UI with EJS templating  
 ✔ Structured MVC architecture (routes, controllers, views)  
@@ -22,6 +22,7 @@ A full-stack Twitter-like web application built with Node.js, Express, and EJS t
 - **JavaScript** — Logic  
 - **HTML & CSS** — Frontend  
 - **Middleware** — for routing and request handling
+- **SQL** — for database
 
 ---
 
@@ -34,7 +35,7 @@ Twistory/
 ├── public/ # Static assets (CSS/JS/images)
 ├── routes/ # Express routes
 ├── views/ # EJS templates
-├── .gitignore
+├── .gitignore /#.env & node modules
 ├── index.js # App entry point
 ├── package.json
 
