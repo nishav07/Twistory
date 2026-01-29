@@ -1,6 +1,113 @@
-// let likeListenerAttached = false;
-// let cmtListenerAttached = false;
-// let postMenuAttached = false;
+// major experimet jo ki sirf isi kek andar hoga so code workk nana kre so is part ko hatanaa////////////////////////////////
+
+document.addEventListener("click", (e) => {
+
+  // LIKE
+  if (e.target.closest("[data-like-btn]")) likebtn(e);
+
+  // COMMENT SEND
+  if (e.target.closest("[data-send-btn]")) cmtSend(e);
+
+  // COMMENT BUTTON
+  if (e.target.closest(".cmt-btn")) cmtBtn(e);
+
+  // POST MENU
+  if (e.target.closest("i[vertical-option-bar]")) postMenuBtn(e);
+
+  // EDIT POST
+  if (e.target.closest("[data-edit]")) editPostBtn(e);
+
+  // DELETE POST
+  if (e.target.closest("[data-delete]")) deletePostBtn(e);
+
+  // DRAFT MENU
+  if (e.target.closest("i[vertical-option-barrr]")) draftMenu(e);
+
+  // DRAFT DELETE
+  if (e.target.closest("[data-draft-delete]")) deleteDraftBtn(e);
+
+  // UPDATE POST
+  // if (e.target.closest("[data-update-btn]")) updatePost(e);
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 document.querySelectorAll("a[data-page]").forEach(link => {
   link.addEventListener("click", (e) => {
@@ -9,6 +116,11 @@ document.querySelectorAll("a[data-page]").forEach(link => {
     loadPage(page);
   });
 });
+
+
+
+
+
 
 
 
@@ -32,16 +144,16 @@ function initPage(page) {
   if (page === "feed") {
     // initFeedPage();
     // initCommnetSec();
-     likebtn();
-    cmtBtn();
-    postMenuBtn();
+    //  likebtn();
+    // cmtBtn();
+    // postMenuBtn();
   } else if (page === "write") {
     initNotesPage();
   } else if (page === "profile") {
     loadProfilePage("post");
     initEditPage();
   } else if (page === "drafts") {
-    draftMenu()
+    // draftMenu()
   } else if (page === ""){
     initFeedPage();
   }
@@ -226,11 +338,7 @@ document.addEventListener("click", (e) => {
 //------------------------ likes & commnet mechnaismssnwfjd,-----------------------------
 
 
-
-function likebtn() {
-// if (likeListenerAttached) return; 
-//   likeListenerAttached = true;
-  document.addEventListener('click', async (e) => {
+function likebtn(e) {
     const btn = e.target.closest("[data-like-btn]");
     if (!btn) return;
 
@@ -243,97 +351,176 @@ function likebtn() {
     const icon = btn.querySelector("[data-like-icon]");
     const countSpan = btn.querySelector("[data-like-count]");
 
-
-    const res = await fetch("/likes", {
+    fetch("/likes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ postID, userID })
-    });
-
-    const data = await res.json();
-    console.log("data", data);
-
-    if (icon) {
-      if (data.isliked === true) {
-        icon.classList.add("text-red-500");
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.isliked) {
+        icon.classList.add("text-red-500", "fa-solid");
         icon.classList.remove("fa-regular");
-        icon.classList.add("fa-solid");
       } else {
-        icon.classList.remove("text-red-500");
-        icon.classList.remove("fa-solid");
+        icon.classList.remove("text-red-500", "fa-solid");
         icon.classList.add("fa-regular");
       }
-    }
 
-
-    if (countSpan) {
       countSpan.innerText = data.data;
-    }
-  });
+    });
 }
+
+
+
+// function likebtn() {
+// // if (likeListenerAttached) return; 
+// //   likeListenerAttached = true;
+//   document.addEventListener('click', async (e) => {
+//     const btn = e.target.closest("[data-like-btn]");
+//     if (!btn) return;
+
+//     btn.disabled = true;
+//     setTimeout(() => btn.disabled = false, 500);
+
+//     const postID = btn.dataset.postid;
+//     const userID = btn.dataset.userid;
+
+//     const icon = btn.querySelector("[data-like-icon]");
+//     const countSpan = btn.querySelector("[data-like-count]");
+
+
+//     const res = await fetch("/likes", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ postID, userID })
+//     });
+
+//     const data = await res.json();
+//     console.log("data", data);
+
+//     if (icon) {
+//       if (data.isliked === true) {
+//         icon.classList.add("text-red-500");
+//         icon.classList.remove("fa-regular");
+//         icon.classList.add("fa-solid");
+//       } else {
+//         icon.classList.remove("text-red-500");
+//         icon.classList.remove("fa-solid");
+//         icon.classList.add("fa-regular");
+//       }
+//     }
+
+
+//     if (countSpan) {
+//       countSpan.innerText = data.data;
+//     }
+//   });
+// }
 
 //------------------------------------------- comments--------------------------------------------------------
 
 let curr_post_id = null;
 let curr_user_id = null;
 
-function cmtBtn() {
-  // if(cmtListenerAttached) return;
-  //  cmtListenerAttached = true;
-  document.addEventListener("click", async(e) => {
 
-    if (e.target.closest(".cmt-btn")) {
-      const btn = e.target.closest(".cmt-btn");
+function cmtBtn(e) {
+  const btn = e.target.closest(".cmt-btn");
+  if (!btn) return;
 
-      curr_post_id = btn.dataset.postid;
-      curr_user_id = btn.dataset.userid;
+  curr_post_id = btn.dataset.postid;
+  curr_user_id = btn.dataset.userid;
+}
 
-      console.log("COMMENT BTN CLICK:", { curr_post_id, curr_user_id });
+function cmtSend(e) {
+  const sendBtn = e.target.closest("[data-send-btn]");
+  if (!sendBtn) return;
 
-    }
+  const wrapper = sendBtn.closest("#c-input");
+  const input = wrapper.querySelector("[data-cmt-input]");
+  const value = input.value.trim();
+  if (value === "") return;
 
+  input.value = "";
 
-    if (e.target.closest("[data-send-btn]")) {
-      const sendBtn = e.target.closest("[data-send-btn]");
-      const wrapper = sendBtn.closest("#c-input");
-      const input = wrapper.querySelector("[data-cmt-input]");
-
-      const value = input.value.trim();
-
-      console.log("INPUT VALUE:", value);
-
-      if (value === "") return console.log("Empty comment");
-
-      input.value = "";
-
-       const res = await axios.post("/comments",{
-              postID:curr_post_id,
-              userID:curr_user_id,
-              comment:value
-            })
-
-        
-         if(res.status === 200){
-      window.location.href = "/Dashboard"
-    }
-        
-    }
-
-  })
+  axios.post("/comments", {
+    postID: curr_post_id,
+    userID: curr_user_id,
+    comment: value
+  }).then(res => {
+    if (res.status === 200) window.location.href = "/Dashboard";
+  });
 }
 
 
-function postMenuBtn(){
+
+// function cmtBtn() {
+//   // if(cmtListenerAttached) return;
+//   //  cmtListenerAttached = true;
+//   document.addEventListener("click", async(e) => {
+
+//     if (e.target.closest(".cmt-btn")) {
+//       const btn = e.target.closest(".cmt-btn");
+
+//       curr_post_id = btn.dataset.postid;
+//       curr_user_id = btn.dataset.userid;
+
+//       console.log("COMMENT BTN CLICK:", { curr_post_id, curr_user_id });
+
+//     }
+
+
+//     if (e.target.closest("[data-send-btn]")) {
+//       const sendBtn = e.target.closest("[data-send-btn]");
+//       const wrapper = sendBtn.closest("#c-input");
+//       const input = wrapper.querySelector("[data-cmt-input]");
+
+//       const value = input.value.trim();
+
+//       console.log("INPUT VALUE:", value);
+
+//       if (value === "") return console.log("Empty comment");
+
+//       input.value = "";
+
+//        const res = await axios.post("/comments",{
+//               postID:curr_post_id,
+//               userID:curr_user_id,
+//               comment:value
+//             })
+
+        
+//          if(res.status === 200){
+//       window.location.href = "/Dashboard"
+//     }
+        
+//     }
+
+//   })
+// }
+
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------------------------
+
+
+
+function postMenuBtn(e){
   // if(postMenuAttached) return;
   // postMenuAttached = true;
  console.log("MENU ACTIVE");
-   document.addEventListener("click", async(e) => {
+  //  document.addEventListener("click", async(e) => {
 
   const menuBtn = e.target.closest("i[vertical-option-bar]");
-  if (menuBtn) {
+  if (!menuBtn)  return;
+
   const container = menuBtn.closest(".posts");
   const currentMenu = container.querySelector("[data-menu-box]");
-
   if (!currentMenu.classList.contains("hidden")) {
       currentMenu.classList.add("hidden");
     return;
@@ -346,20 +533,54 @@ function postMenuBtn(){
   currentMenu.classList.remove("hidden");
 
   return;
-  }
+  // }
 
 
-  if (e.target.closest("[data-edit]")) {
-    console.log("User edittttt krna chaaaahhh rha hai");
+  // if (e.target.closest("[data-edit]")) {
+  //   console.log("User edittttt krna chaaaahhh rha hai");
+  //   const editBtn = e.target.closest("[data-edit]");
+  //   const postID  = editBtn.dataset.postid;
+  //   console.log(postID)
+  //   loadPage("postEdit");
+  //   updatePost(postID);
+  // }
+
+  // if (e.target.closest("[data-delete]")) {
+  //   const btn = e.target.closest("[data-delete]");
+  //   const postID = btn.dataset.postid;
+  //   const userID = btn.dataset.userid;
+  //   console.log("postid userid:",postID,userID)
+
+  //   const res = await axios.delete("/delete",{
+  //             data:{postID,userID}
+  //           })
+
+  //   if(res.status === 200){
+  //     window.location.href = "/Dashboard"
+  //   }
+
+    
+  // }
+
+// });
+
+}
+
+async function editPostBtn(e) {
     const editBtn = e.target.closest("[data-edit]");
+    if(!editBtn) return;
+
+    console.log("User edittttt krna chaaaahhh rha hai");
     const postID  = editBtn.dataset.postid;
     console.log(postID)
     loadPage("postEdit");
     updatePost(postID);
-  }
+}
 
-  if (e.target.closest("[data-delete]")) {
-    const btn = e.target.closest("[data-delete]");
+async function deletePostBtn(e){
+  const btn = e.target.closest("[data-delete]");
+  if(!btn) return;
+
     const postID = btn.dataset.postid;
     const userID = btn.dataset.userid;
     console.log("postid userid:",postID,userID)
@@ -371,15 +592,13 @@ function postMenuBtn(){
     if(res.status === 200){
       window.location.href = "/Dashboard"
     }
-
-    
-  }
-
-});
-
 }
 
- function updatePost(id){
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+ async function updatePost(id){
   document.addEventListener("click",async(e) => {
     if(!e.target.closest("[data-update-btn]")) return
     const btn = e.target.closest("[data-update-btn]");
@@ -408,12 +627,11 @@ function postMenuBtn(){
 }
 
 
-function draftMenu(){
-  console.log("draft menu clciked");
-  document.addEventListener("click",async(e) => {
+async function draftMenu(e){
+  // document.addEventListener("click",async(e) => {
   const menuBtn = e.target.closest("i[vertical-option-barrr]");
-  if (menuBtn) {
-    console.log("menu btn cliked")
+  if (!menuBtn) return;
+   console.log("draft menu clciked");
   const container = menuBtn.closest(".postsss");
   const currentMenu = container.querySelector("[data-menu-boxxx]");
   console.log(container);
@@ -422,19 +640,38 @@ function draftMenu(){
       currentMenu.classList.add("hidden");
   return;
   }
-
   const allMenus = document.querySelectorAll("[data-menu-boxxx]");
   allMenus.forEach(menu => menu.classList.add("hidden"));
-
-
   currentMenu.classList.remove("hidden");
 
   return;
-  }
+  // }
 
 
-   if (e.target.closest("[data-draft-delete]")) {
-    const btn = e.target.closest("[data-draft-delete]");
+  //  if (e.target.closest("[data-draft-delete]")) {
+  //   const btn = e.target.closest("[data-draft-delete]");
+  //   const postID = btn.dataset.postid;
+  //   const userID = btn.dataset.userid;
+  //   console.log("postid userid:",postID,userID)
+
+  //   const res = await axios.delete("/deleteDrafts",{
+  //             data:{postID,userID}
+  //           })
+
+  //   if(res.status === 200){
+  //     loadPage("drafts")
+  //   }
+
+  //   console.log("delete btn clicked");
+    
+  // }
+  // })
+}
+
+async function deleteDraftBtn(e){
+  const btn = e.target.closest("[data-draft-delete]");
+  if(!btn) return;
+
     const postID = btn.dataset.postid;
     const userID = btn.dataset.userid;
     console.log("postid userid:",postID,userID)
@@ -448,8 +685,4 @@ function draftMenu(){
     }
 
     console.log("delete btn clicked");
-    
-  }
-  })
 }
-
